@@ -1,0 +1,37 @@
+.dropdownBody {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #bfbfbf;
+  border-radius: 16px;
+  font-size: 18px;
+  &>svg {
+    margin-top: 50%;
+    transform: translateY(-50%)
+  }
+  &:hover {
+    color: #40a9ff;
+    border-color: #40a9ff;
+  }
+  transition: all 0.2s;
+}
+.dropdownList {
+
+  &>ul{
+    background-color: rgba(31,35,41,.9);
+    padding: 0;
+    font-size: 16px;
+    border-radius: 5px;
+    overflow: hidden;
+    &>li {
+      height: 50px;
+      color: #fff !important;
+      padding: 5px 20px;
+      &:hover {
+        background-color: #585858;
+      }
+      :global(.ant-dropdown-menu-item-icon) {
+        font-size: 16px !important;
+      }
+    }
+  }
+}

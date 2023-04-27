@@ -1,0 +1,124 @@
+.messageContent {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  &>section>:global(.ant-page-header) {
+    display: flex;
+    padding-top: 0;
+    padding-bottom: 0;
+    flex-shrink: 0;
+    &>*{
+      flex-grow: 1;
+    }
+  }
+  .content {
+    height: 300px;
+    flex-grow: 1;
+    overflow-y: scroll;
+    .listMeta {
+      align-items: center;
+      // padding: 15px;
+      :global(.ant-list-item-meta-content) {
+        width: unset;
+        flex: unset;
+      }
+      :global(.ant-list-item-meta-avatar) {
+        margin-left: 16px;
+      }
+    }
+    // li {
+    //   overflow-anchor: none;
+    //   &:last-child {
+    //     overflow-anchor: auto;
+    //   }
+    // }
+    .currentUser {
+      flex-direction: row-reverse;
+    }
+  }
+  .footer {
+    padding-top: 5px;
+    background-color: unset;
+    // height: 55px;
+    // width: 100%;
+    display: flex;
+    height: fit-content;
+    textarea {
+      border-radius: 5px;
+      min-height: 40px;
+      box-sizing: content-box;
+      padding: 4px 11px 40px 11px;
+    }
+    .footerActions {
+      position: absolute;
+      bottom: 32px;
+      right: 50px;
+      width: 80px;
+      display: flex;
+      justify-content: space-around;
+      &>span{
+        &>svg {
+          width: 20px;
+          height: 20px;
+          color: #919191
+        }
+      }
+    }
+  }
+}
+.empty {
+  color: #0ba0a0;
+}
+.messageContentEmpty {
+  width: 100px;
+  svg {
+    width: inherit;
+  }
+}
+.TalkContentAvatar {
+  width: 32px !important;
+  height: 32px !important;
+  overflow: hidden;
+  padding: 0px !important;
+  span{ 
+    transform: none !important;
+    width: 100%;
+    left: 0;
+    display: block;
+    img {
+      display: block;
+    }
+  }
+}
+.mediaBox {
+  display: flex;
+  justify-content: center;
+}
+.FileMediaBox {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #f0f0f0;
+  .icon {
+    padding-right: 20px;
+    color: #b02e8d;
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+.maskPreView {
+  width: 100vw;
+  height: 100vh;
+  background-color: #f3f3f3eb;
+  position: absolute;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
