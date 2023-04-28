@@ -11,6 +11,9 @@
     "test:coverage": "umi-test --coverage",
     "deploy": "git push deploy master"
   },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
   "config":{
     "deploy":{
       "production":{
@@ -23,9 +26,6 @@
         "post-deploy": "npm install"
       }
     }
-  },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "*.{js,jsx,less,md,json}": [
