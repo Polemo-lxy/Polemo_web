@@ -8,7 +8,21 @@
     "postinstall": "umi generate tmp",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
     "test": "umi-test",
-    "test:coverage": "umi-test --coverage"
+    "test:coverage": "umi-test --coverage",
+    "deploy": "git push deploy master"
+  },
+  "config":{
+    "deploy":{
+      "production":{
+        "user":"root",
+        "host": "182.160.4.8",
+        "ref": "origin/master",
+        "repo": "ssh://git@182.160.4.8:/git/PrivateItems.git",
+        "path": "/var/www/html/polemo",
+        "ssh_optins": ["StrictHostKeyChecking=no","PasswordAuthentication=no"],
+        "post-deploy": "npm install"
+      }
+    }
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
