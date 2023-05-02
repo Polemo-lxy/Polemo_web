@@ -1,14 +1,15 @@
 import { Avatar } from 'antd'
 import styles from './index.less'
+import { host } from '@/scripts/constants'
 
 export const AvatarWithWhiteEdge = ({headpath,name,...props}: any) => {
 
   return <div className={styles.EdgeAvatar}>
     <Avatar
       children={headpath?
-        <img 
-          style={{width:'100%',objectFit:'cover'}} 
-          src={`http://localhost:3005${headpath}`}
+        <img
+          style={{width:'100%',objectFit:'cover'}}
+          src={`${host}${headpath}`}
         />
         :name?.slice(-2)
       }
@@ -18,11 +19,11 @@ export const AvatarWithWhiteEdge = ({headpath,name,...props}: any) => {
 }
 
 export default ({headpath,name,...props}: any) => {
-  return <Avatar 
+  return <Avatar
     children={headpath?
-      <img 
-        style={{width:'100%',objectFit:'cover'}} 
-        src={`http://localhost:3005${headpath}`}
+      <img
+        style={{width:'100%',objectFit:'cover'}}
+        src={`${host}${headpath}`}
       />
       :name?.slice(-2)
     }

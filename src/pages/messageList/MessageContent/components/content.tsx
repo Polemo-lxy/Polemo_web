@@ -8,7 +8,7 @@ import React,{ useRef } from 'react';
 import { FileUnknownOutlined } from '@ant-design/icons'
 import { getMemoryVolume } from '@/utils/getMemoryVolume';
 import Mask from '@/components/Mask';
-
+import { host } from '@/scripts/constants';
 
 const { Content } = Layout;
 export default ({chat}: any) => {
@@ -32,18 +32,18 @@ export default ({chat}: any) => {
             // debugger
             const suffix = item.imageMes.split('.')[1]
             if([".bpm",".gif",".ico",".jpeg",".jpg",".png",".svg",".tif",".tiff",".webp"]?.includes(`.${suffix}`)){
-              title = <Mask 
+              title = <Mask
                 node={
-                  <img 
-                    style={{maxWidth: 400,height: 250,borderRadius: 10,cursor:'zoom-in'}} 
-                    src={'http://localhost:3005'+item.imageMes}
+                  <img
+                    style={{maxWidth: 400,height: 250,borderRadius: 10,cursor:'zoom-in'}}
+                    src={host+item.imageMes}
                     draggable="false"
                   />
-                } 
-                src={'http://localhost:3005'+item.imageMes}
+                }
+                src={host+item.imageMes}
               />
             }else if([".avi",".mpeg",".ogv",".webm",".3gp",".3g2",".mp4"]?.includes(`.${suffix}`)) {
-              title=<video style={{height: 300}} src={'http://localhost:3005'+item.imageMes} controls/>;
+              title=<video style={{height: 300}} src={host+item.imageMes} controls/>;
             }else {
               const [,,size,...rest] = item.imageMes.split('_')
               const name = rest.join('_')
@@ -71,7 +71,7 @@ export default ({chat}: any) => {
                 style={{textAlign:'center'}}
               />
             }
-            
+
           </List.Item>
         }}
         bordered={false}
