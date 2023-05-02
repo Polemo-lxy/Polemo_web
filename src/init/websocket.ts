@@ -1,21 +1,22 @@
 import Oauth from "@/scripts/oauth";
+import { websocketHost } from "@/scripts/constants";
 
 let lockReconnect = false; // 是否允许重新建立连接
 let timeout = 1000 * 20; // 心跳间隔
 let reTimeout = 1000 * 10; // 重连间隔
 let timeoutTimer = null; // 心跳定时器
 let reTimeoutTimer: any = null; // 重连定时器
-let webSocket = null; 
+let webSocket = null;
 
 export const createWebSocket = (props: any) => {
-  
+
   const token = Oauth.getStoreToken()
   if(!token){
     window.location.href = '/login';
     return;
   }
   const { onMessageCallback,onMesListCallback } = props;
-  let webSocket = new WebSocket('ws://localhost:8080/api/getChatContent',token)
+  let webSocket = new WebSocket(`ws://${websocketHost}/api/getChatContent`,token)
   webSocket.binaryType = 'arraybuffer';
   webSocket.onerror = function () {
     console.log('连接失败...');
