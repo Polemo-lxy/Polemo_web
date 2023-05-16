@@ -10,11 +10,11 @@ export const routeMenu = [
     name: '联系人',
     iconType: 'icon-person'
   },
-  {
-    path: '/calendar',
-    name: '日程',
-    iconType: 'icon-calendar',
-  },
+  // {
+  //   path: '/calendar',
+  //   name: '日程',
+  //   iconType: 'icon-calendar',
+  // },
   // {
   //   path: '/app1',
   //   name: '子应用1',
@@ -33,7 +33,11 @@ const routerConfig = [
     path: '/login',
     component: '@/pages/login/index'
   },
-  { 
+  {
+    path: '/rtcroom',
+    component: '@/pages/rtc/index'
+  },
+  {
     path: '/',
     component: '@/layouts/index',
     routes: [
@@ -68,7 +72,8 @@ const routerConfig = [
       // },
       {
         path: '/',
-        redirect: '/messagelist'
+        redirect: '/messagelist',
+        // component: '@/pages/messageList/index',
       },
       {
         component: '@/pages/404'

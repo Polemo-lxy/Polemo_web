@@ -1,4 +1,4 @@
-import { Form, Input, Upload, Select, Button } from 'antd';
+import { Form, Input, Upload, Select, Button,message } from 'antd';
 import { PlusOutlined, SwapOutlined } from '@ant-design/icons'
 import { getBase64 } from '@/utils/transforeFileIntoBase64';
 import type { RcFile } from 'antd/es/upload/interface';
@@ -7,7 +7,7 @@ import { useRequest } from 'umi';
 import { createGroup, fetchConcatPerson } from '@/services/concat';
 
 const { Item } = Form
-export default ({destoryModal}: any) => {
+export default ({destoryModal,callback}: any) => {
   const [headPath,setHeadPath] = useState()
   const onChange = ({file,fileList}: any) => {
     getBase64(file.originFileObj as RcFile, url => {
@@ -29,12 +29,14 @@ export default ({destoryModal}: any) => {
   })
   const [form] = Form.useForm()
   return <>
-    <Form 
+    <Form
       form={form}
       onFinish={async () => {
         const {name,headpath: headpathFile,members} = form.getFieldsValue()
         const headpath = headpathFile?.file?.url;
         await createGroup({name,headpath,members})
+        message.success('创建成功')
+        callback?.()
         destoryModal()
       }}
     >

@@ -14,3 +14,37 @@
   }
   transition: all 0.2s;
 }
+.searchOfModal {
+  width: max-content !important;
+  :global(.ant-modal-content){
+    width: 700px;
+    :global(.ant-modal-confirm-title){
+      input {
+        font-size: 20px;
+      }
+    }
+  }
+}
+.list {
+  :global(.ant-list-header) {
+    border: 0px;
+  }
+}
+.recordsItem {
+  display: grid;
+  grid-template-columns: 32px 130px 100px auto 100px;
+  justify-content: stretch;
+  cursor: pointer;
+  &>*{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .infoContent {
+    font-size: 12px;
+  }
+  .infoTime {
+    font-size: 12px;
+    justify-self: right;
+  }
+}

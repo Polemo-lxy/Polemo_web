@@ -20,8 +20,6 @@ const CurrentChatModel = {
     // },
     // @ts-ignore
     *setConnectList({ payload },{ put }) {
-      console.log('payload',payload);
-      
       yield put({
         type: 'saveConnectList',
         payload

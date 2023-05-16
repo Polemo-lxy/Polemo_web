@@ -1,7 +1,7 @@
 import { fetchConcatGroup, fetchConcatPerson } from '@/services/concat'
 import { Button, List, Modal } from 'antd'
 import { useEffect, useState } from 'react'
-import { Link, useRequest } from 'umi'
+import { Link, useDispatch, useRequest } from 'umi'
 import Avatar from '@/components/Avatar'
 import styles from './index.less'
 import AddAccount from '@/components/AddAccount'
@@ -24,6 +24,7 @@ export default ({ tab }: any) => {
     }
   },[tab])
   const[addAccountShow,setAddAccount] = useState(false)
+  const dispatch = useDispatch()
   return <>
     <header className={styles.header}>
       {
@@ -35,22 +36,44 @@ export default ({ tab }: any) => {
         :'我的群组'
       }
     </header>
-    <List 
+    <List
       itemLayout='horizontal'
       dataSource={tab === 'person'?PersonList:groupList}
       renderItem={(item,index) => {
         return <Item>
-          <Link to={'/messageList'} className={styles.listItem}>
+          <Link
+            to={{
+              pathname: '/messageList',
+              state: {
+                event: 'stopDefaultActiveEvent'
+              },
+            }}
+            // to={''}
+            onClick={() => {
+              console.log('item',item);
+              dispatch({
+                type: 'currentChat/fetchCurrentChat',
+                payload: {
+                  type: tab === 'person'?1:2,
+                  receiverId: item.id,
+                  name: item.name,
+                  path: item.path
+                }
+              })
+              return
+            }}
+            className={styles.listItem}
+          >
             <Item.Meta
               avatar={<Avatar headpath={item?.headpath} name={item?.name}/>}
               title={item.name}
               description={''}
             />
           </Link>
-          <Button 
-            type="link" 
-            danger 
-            icon={tab === 'person'?<DeleteOutlined />: <ExportOutlined />} 
+          <Button
+            type="link"
+            danger
+            icon={tab === 'person'?<DeleteOutlined />: <ExportOutlined />}
             style={{paddingRight: 10}}
             onClick={() => {
               const isPerson = tab === 'person'
@@ -60,7 +83,8 @@ export default ({ tab }: any) => {
                 onOk: async () => {
                   await deleteAccount({type: 1,receiverId: item?.id})
                   getContactPerson()
-                }
+                },
+                maskClosable: true
               }
               const groupConfig = {
                 content: '确定退出该群组吗？',
@@ -68,7 +92,8 @@ export default ({ tab }: any) => {
                 onOk: async () => {
                   await deleteAccount({type: 0,receiverId: item?.id})
                   getContactGroup()
-                }
+                },
+                maskClosable: true
               }
               Modal.warning(isPerson?personConfig:groupConfig)
             }}

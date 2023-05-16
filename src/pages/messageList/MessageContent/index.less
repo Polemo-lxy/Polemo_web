@@ -1,6 +1,7 @@
 .messageContent {
   width: 100%;
   height: 100%;
+  min-width: 300px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,12 +22,53 @@
     .listMeta {
       align-items: center;
       // padding: 15px;
+      padding: 0px 10px;
       :global(.ant-list-item-meta-content) {
+        max-width: calc(100% - 20px - 150px);
         width: unset;
         flex: unset;
+        flex-grow: 1;
+        .listContentTime {
+          font-size: 12px;
+          color: #b7b7b7;
+          font-weight: 400;
+          visibility: hidden;
+        }
+        .listContentBody {
+          display: flex;
+          align-items: flex-start;
+          max-width: calc(100% - 64px);
+        }
+        .listContentTitle {
+          padding: 5px;
+          border-radius: 5px;
+          margin: 0px;
+          background-color: #8af9ff;
+          max-width: calc(100% - 150px - 20px);
+        }
+        .listContentActions {
+          min-width: 150px;
+          margin-left: 10px;
+          margin-right: 10px;
+          visibility: hidden;
+
+        }
       }
       :global(.ant-list-item-meta-avatar) {
         margin-left: 16px;
+      }
+    }
+    .listMeta:hover {
+      .listContentTime {
+        visibility: visible;
+      }
+      .listContentActions {
+        visibility: visible;
+        button:hover {
+          svg{
+            color: #1890ff
+          }
+        }
       }
     }
     // li {
@@ -37,15 +79,59 @@
     // }
     .currentUser {
       flex-direction: row-reverse;
+      :global(.ant-list-item-meta-title) {
+        &>div {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          .listContentBody {
+            flex-direction: row-reverse;
+            .listContentActions {
+              display: flex;
+              flex-direction: row-reverse;
+              button {
+                transform: rotateY(180deg);
+              }
+            }
+          }
+        }
+      }
     }
   }
   .footer {
+    position: relative;
     padding-top: 5px;
     background-color: unset;
     // height: 55px;
     // width: 100%;
     display: flex;
     height: fit-content;
+    .reply{
+      position: absolute;
+      z-index: 1;
+      color: #bfbfbf;
+      font-size: 12px;
+      margin: 10px;
+      display: flex;
+      align-items: center;
+      width: calc(100% - 120px);
+      background-color: #e5e5e5;
+    }
+    .closeReply {
+      width: 18px;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      span{
+        display: inline-block;
+        width: inherit;
+      }
+    }
+    .closeReply:hover {
+      background-color: #b0b0b0;
+      border-radius: 3px;
+      cursor: pointer;
+    }
     textarea {
       border-radius: 5px;
       min-height: 40px;
@@ -83,7 +169,7 @@
   height: 32px !important;
   overflow: hidden;
   padding: 0px !important;
-  span{ 
+  span{
     transform: none !important;
     width: 100%;
     left: 0;

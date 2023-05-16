@@ -9,8 +9,9 @@ import Avatar from "@/components/Avatar"
 import { useEffect, useState, useMemo } from "react"
 import classNames from "classnames"
 import dayjs from "dayjs"
+import { useLocation,useHistory } from "umi"
 export default ({socket}: any) => {
-  console.log('socketState',socket?.readyState)
+  const {state} = useLocation()
   //@ts-ignore
   const { currentChat: {chat},connectList: {list} } = useSelector(({currentChat,connectList}) =>({currentChat,connectList}))
   const [showChangeActiveTab,setShowChangeActiveTab] = useState(true);
@@ -18,6 +19,7 @@ export default ({socket}: any) => {
   const dispatch = useDispatch()
   const onActiveChatChange = ({type,id,name,headpath}: any) => {
     setActiveChat({ type, receiverId: id, name })
+
     dispatch({
       type: 'currentChat/fetchCurrentChat',
       payload: {
@@ -28,10 +30,22 @@ export default ({socket}: any) => {
       }
     })
   }
+  useEffect(() => {
+    setActiveChat(chat.chatInfo)
+  },[chat.chatInfo])
 
   useEffect(() =>{
+    // console.log('socket',state,showChangeActiveTab , list , chat.chatInfo);
+    if(state?.event) {
+      console.log(history)
+      history.replaceState({},"",location.href)
+    }
+    if(list.length && !list.some((item: any) => item?.type === chat.chatInfo?.type && item?.id === chat.chatInfo?.receiverId)) {
+      onActiveChatChange(list[0]);
+    }
+
     // 在页面重新渲染时会自动设置对话窗口为第一项
-    if(showChangeActiveTab && list?.length){
+    if(showChangeActiveTab && list?.length && !state?.event){
       onActiveChatChange(list[0]);
       setShowChangeActiveTab(false)
     }
@@ -41,7 +55,7 @@ export default ({socket}: any) => {
       <Selector />
       <Options />
     </div>
-    {socket?.readyState === 1 ?<List 
+    {socket?.readyState === 1 ?<List
       className={styles.listBox}
       dataSource={list}
       locale = {{emptyText: <div className={styles.messageListEmpty}><Empty description='暂无消息' className={styles.emptyIcon}/></div>}}
@@ -51,8 +65,8 @@ export default ({socket}: any) => {
           ?dayjs(lasttime).format('HH:mm')
           :dayjs(lasttime).format(dayjs().isSame(lasttime,'year')?'MM/DD':'YYYY/MM/DD')
         console.log('timer',lasttime,dayjs(lasttime));
-        
-        return <List.Item 
+
+        return <List.Item
           className={classNames(styles.listItem,{
             [styles.activeChat]: id === activeChat?.receiverId && type === activeChat?.type
           })}
@@ -72,8 +86,8 @@ export default ({socket}: any) => {
         {/* <div className={styles.skeletonBox}> */}
           <div className={styles.listBox} >
             {
-              Array(3).fill(0).map(item => {
-                return <div className={styles.itemBox}>
+              Array(3).fill(0).map((item,index) => {
+                return <div className={styles.itemBox} key={'skeleton'+index}>
                   <Skeleton.Avatar active/>
                   <Skeleton active title={false} paragraph={{rows: 1,width: 70}} className={styles.itemName}/>
                   <Skeleton active title={false} paragraph={{rows: 1,width: 30}} className={styles.itemTime}/>

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRequest } from 'umi';
 
 const { Search } = Input;
-export default () => {
+export default ({callback}: any) => {
   const ref = useRef(null)
   const [list,setList] = useState([])
   const {data,run} = useRequest((params) => fetchRelatedGroups(params),{
@@ -18,20 +18,20 @@ export default () => {
     ref?.current && ref.current.focus()
   },[])
   return <>
-        <Search 
-        placeholder='请输入群聊名称/群聊id' 
-        autoFocus 
-        ref={ref} 
+        <Search
+        placeholder='请输入群聊名称/群聊id'
+        autoFocus
+        ref={ref}
         onSearch={(e) => {
           if(e){
             run(e)
           }else{
             message.warning('搜索值不能为空')
           }
-        }} 
+        }}
         autoComplete="off"
       />
-      <List 
+      <List
         dataSource={list}
         renderItem={(item) => {
           return <List.Item>
@@ -41,10 +41,12 @@ export default () => {
               description={null}
               style={{alignItems: 'center'}}
             />
-            <Button 
-              type='link' 
+            <Button
+              type='link'
               onClick={async () =>{
                 await addAccount({type: 2,receiverId: item.id});
+                message.success('添加成功')
+                callback?.()
               }}
             >
               添加

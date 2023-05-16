@@ -1,5 +1,5 @@
-import Oauth from "@/scripts/oauth";
 import { websocketHost } from "@/scripts/constants";
+import Oauth from "@/scripts/oauth";
 
 let lockReconnect = false; // 是否允许重新建立连接
 let timeout = 1000 * 20; // 心跳间隔
@@ -16,7 +16,7 @@ export const createWebSocket = (props: any) => {
     return;
   }
   const { onMessageCallback,onMesListCallback } = props;
-  let webSocket = new WebSocket(`ws://${websocketHost}/api/getChatContent`,token)
+  let webSocket = new WebSocket(`ws://${websocketHost}/websocket/getChatContent`,token)
   webSocket.binaryType = 'arraybuffer';
   webSocket.onerror = function () {
     console.log('连接失败...');
@@ -24,9 +24,10 @@ export const createWebSocket = (props: any) => {
   }
   webSocket.onmessage = (event) => {
     if(event.data) {
-      // 可以写一个回调函数
       let {content,contacts} = JSON.parse(event.data);
+      // 联系人列表
       contacts && onMesListCallback(contacts)
+      // 对话框
       content && onMessageCallback(content)
     }
   }

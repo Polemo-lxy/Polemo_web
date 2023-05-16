@@ -3,11 +3,14 @@ import styles from './index.less'
 import MessageContent from './MessageContent';
 import { connect, useDispatch } from 'umi';
 import { createWebSocket } from '@/init/websocket';
-import { useCallback, useEffect, useMemo, useState,lazy,Suspense } from 'react';
+import { useCallback, useEffect, useMemo, useState,lazy,Suspense, createContext, useContext } from 'react';
 import List from './List'
 
 const { Sider, Content } = Layout;
 // const List = lazy(() => import('./List'));
+
+export const SocketContext = createContext<{socket?: any}>({})
+
 export const MessageList =  ({chat,list}: any) => {
   const dispatch = useDispatch()
   const messageChange = (list: any) => {
@@ -19,22 +22,25 @@ export const MessageList =  ({chat,list}: any) => {
       }
     })
   }
+
   const onMesListCallback = (list: any) => {
     dispatch({
       type: 'connectList/setConnectList',
       payload: list
     })
   }
+  let context = useContext(SocketContext)
   const [socket,setSocket] = useState<WebSocket>()
   useEffect(() => {
     const socket = createWebSocket({onMessageCallback: messageChange,onMesListCallback})
     setSocket(socket)
+    context.socket = socket
   },[])
-  // const socket = createWebSocket({onMessageCallback: messageChange,onMesListCallback})
+
   return <>
     <Layout className={styles.messageListBox}>
       <Sider theme='light' width={350} defaultCollapsed={false} collapsible={false} className={styles.sider}>
-        {/* <Suspense 
+        {/* <Suspense
           fallback={() => {
             return <>
               <div className={styles.skeletonBox}>

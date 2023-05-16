@@ -7,20 +7,12 @@ import Header from './components/header'
 import Content from './components/content'
 import Footer from './components/footer'
 import { createWebSocket } from '@/init/websocket'
+import { useEffect, useState } from 'react'
 
 const MessageContent = ({chat,socket}: any) => {
   const isEmpty = Object.keys(chat).length === 0;
-  // const dispatch = useDispatch()
-  // const messageChange = (list: any) => {
-  //   dispatch({
-  //     type: 'currentChat/setCurrentChat',
-  //     payload: {
-  //       ...chat,
-  //       msgList: list
-  //     }
-  //   })
-  // }
-  // const socket = createWebSocket({onMessageCallback: messageChange})
+  const [replyItem,setReplyItem] = useState({})
+
   return <div className={styles.messageContent}>
     {
       isEmpty
@@ -31,8 +23,8 @@ const MessageContent = ({chat,socket}: any) => {
           style={{width: '100%',background: '#fff',height: '100vh'}}
         >
           <Header chat={chat}/>
-          <Content chat={chat}/>
-          <Footer chat={chat} socket={socket}/>
+          <Content chat={chat} setReplyItem={setReplyItem} socket={socket}/>
+          <Footer chat={chat} socket={socket} replyItem={replyItem} setReplyItem={setReplyItem}/>
         </Layout>
     }
   </div>

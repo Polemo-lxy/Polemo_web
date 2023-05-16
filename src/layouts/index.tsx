@@ -51,6 +51,8 @@ export default ({ children }: { children: React.ReactNode }) => {
     siderWidth={80}
     //侧边栏折叠
     collapsed={false}
+    // 禁止自动切换到移动布局
+    disableMobile
     //侧边栏折叠按钮
     collapsedButtonRender={false}
     // navTheme="light"
@@ -64,12 +66,13 @@ export default ({ children }: { children: React.ReactNode }) => {
     }}
     logo={<>
       <Button onClick={() => setModal(true)} type="link" style={{padding: 0,border: 0,height: 37}}>
-        <AvatarWithWhiteEdge 
+        <AvatarWithWhiteEdge
           headpath={currentUser.headpath}
           name={currentUser.name}
         />
       </Button>
     </>}
+
     title={false}
     headerRender={false}
     // 不适合在此处用，如果页面上内容很少，不足以撑开100vh，但是页面仍然可以出现滚动条
@@ -80,8 +83,8 @@ export default ({ children }: { children: React.ReactNode }) => {
     contentStyle={{margin: 0}}
     menuFooterRender={(menuProps) => {
       return <>
-        <Button 
-          title='退出登录' 
+        <Button
+          title='退出登录'
           type='link'
           onClick={() => {
             Oauth.logout()

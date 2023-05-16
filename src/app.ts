@@ -17,7 +17,7 @@ async function getInitialState() {
 
 // // 运行时动态注册子应用
 // export const qiankun = new Promise((resolve,reject) => {
-  
+
 //   resolve({
 //     apps: [
 //       {

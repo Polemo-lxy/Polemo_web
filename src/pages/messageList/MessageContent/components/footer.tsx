@@ -1,18 +1,19 @@
 import { Layout, Input, Button,Popover,Dropdown,Modal } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from '../index.less'
-import { PictureOutlined, SmileOutlined, PlusCircleOutlined,FolderAddOutlined,IdcardOutlined, FileUnknownOutlined } from '@ant-design/icons'
+import { PictureOutlined, SmileOutlined, PlusCircleOutlined,FolderAddOutlined,IdcardOutlined, FileUnknownOutlined,CloseOutlined } from '@ant-design/icons'
 import { IconFont } from '@/components/IconFont';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data'
 import { getBase64 } from '@/utils/transforeFileIntoBase64';
 import type { RcFile } from 'antd/es/upload/interface';
 import { getMemoryVolume } from '@/utils/getMemoryVolume';
+import filePickerOptions from '@/utils/filePickerOptions';
 
 const { Footer } = Layout;
 const { TextArea } = Input;
-export default ({chat,socket}: any) => {
+export default ({chat,socket,replyItem,setReplyItem}: any) => {
   const [sendMes, setSendMes] = useState<string>('')
   const onKeyDown = async (e: any) => {
     if(e.shiftKey && e.keyCode === 13) {
@@ -25,10 +26,14 @@ export default ({chat,socket}: any) => {
           ...chat.chatInfo,
           msgInfo: {
             content: sendMes,
-            sendTime: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss.ms')
+            sendTime: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss.ms'),
+            replyId: replyItem.logId
           },
         }))
         setSendMes('')
+        setReplyItem({})
+        //@ts-ignore
+        document.getElementById('polemo-footer-textarea').style.paddingTop = '4px'
       }
     }
   }
@@ -39,21 +44,19 @@ export default ({chat,socket}: any) => {
       label: '图片/视频',
       icon: <PictureOutlined />,
       onClick: async () => {
-        const arr =await window.showOpenFilePicker({
-          types: [
-            {
-              description: "Images",
-              accept: {
-                "image/*": [".png", ".gif", ".jpeg", ".jpg"],
-                "video/*": [".avi",".mpeg",".mpg",".rm",".ram",".mp4"]
-              },
-            },
-          ],
-          excludeAcceptAllOption: true,
-          multiple: false
+        const files = await filePickerOptions({
+          config: {
+            multiple: false,
+            accept: {
+              "image/*": [".png", ".gif", ".jpeg", ".jpg"],
+              "video/*": [".avi",".mpeg",".mpg",".rm",".ram",".mp4"]
+            }
+          }
         })
-        const file = await arr[0].getFile()
+        console.log('aaaaa',files);
+        const file = files[0]
         const isImage = file.type.search(/^image/) !== -1
+
         Modal.confirm({
           icon: null,
           title: '确定发送以下图片/视频吗？',
@@ -175,10 +178,33 @@ export default ({chat,socket}: any) => {
 
     {/* <Button type='link' icon={<PictureOutlined />}></Button> */}
   </div>
+  const replyElement = useMemo(() => {
+    console.log('ref',replyItem);
+
+    if(!Object.keys(replyItem)?.length || !document.getElementById('polemo-footer-textarea')){
+      return null
+    }
+    //@ts-ignore
+    document.getElementById('polemo-footer-textarea').style.paddingTop = '30px'
+    return <div className={styles.reply} >
+      <span
+        onClick={() => {
+          //@ts-ignore
+          document.getElementById('polemo-footer-textarea').style.paddingTop = '4px'
+          setReplyItem({})
+        }}
+        className={styles.closeReply}
+      >
+        <CloseOutlined />
+      </span>
+      <span style={{whiteSpace: 'nowrap',flex:1,textOverflow: 'ellipsis',overflow: 'hidden'}}> | 回复 {replyItem?.sender?.name} : {replyItem?.content}</span>
+    </div>
+  },[replyItem])
   return <>
     <Footer
       className={styles.footer}
     >
+        {replyElement}
         <TextArea
           value={sendMes}
           placeholder={`发送给 ${chat.chatInfo.name}`}
@@ -188,7 +214,7 @@ export default ({chat,socket}: any) => {
           onChange={(e) => {
             setSendMes(e.target.value)
           }}
-
+          id="polemo-footer-textarea"
         />
         {
           actions
